@@ -827,31 +827,27 @@
     }
 
     function chooseRsvp(choice) {
-      const url = new URL("https://script.google.com/macros/s/AKfycbx3PZT6Yeq7OD4PPeuOx90U5TO2EN6T0YWd9HVZGTuXFEd6oSuHwuZAKbKPixGbnp2ccA/exec");
       const attendValue = choice === "yes" ? "Có tham gia" : "Tiếc quá, không tham gia được";
 
+      closeRsvpModal();
+
+      if (choice === "yes") {
+        showSuccessMessage();
+      } else {
+        showThanksMessage();
+      }
+
+      const url = new URL("https://script.google.com/macros/s/AKfycbx3PZT6Yeq7OD4PPeuOx90U5TO2EN6T0YWd9HVZGTuXFEd6oSuHwuZAKbKPixGbnp2ccA/exec");
       url.searchParams.set("name", guestName);
       url.searchParams.set("attend", attendValue);
 
-      const buttons = document.querySelectorAll(".rsvp-choice-btn");
-      buttons.forEach(btn => btn.disabled = true);
-
-      fetch(url.toString(), { method: "GET", mode: "no-cors" })
-        .then(() => {
-          closeRsvpModal();
-
-          if (choice === "yes") {
-            showSuccessMessage();
-          } else if (choice === "no") {
-            showThanksMessage();
-          }
-        })
-        .catch(() => {
-          alert("Gửi xác nhận chưa thành công.");
-        })
-        .finally(() => {
-          buttons.forEach(btn => btn.disabled = false);
-        });
+      try {
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon(url.toString());
+        } else {
+          fetch(url.toString(), { method: "GET", mode: "no-cors", keepalive: true }).catch(() => {});
+        }
+      } catch (e) {}
     }
 
     function showSuccessMessage() {
