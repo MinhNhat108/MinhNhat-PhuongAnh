@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -596,6 +597,104 @@
         font-size:15px;
       }
     }
+  
+    .success-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.28);
+      z-index: 10000;
+      overflow: hidden;
+      padding: 16px;
+    }
+    #fireworksCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .success-box {
+      position: relative;
+      z-index: 2;
+      width: min(92%, 430px);
+      background: rgba(255,253,248,.97);
+      border: 2px solid var(--line);
+      border-radius: 22px;
+      padding: 24px 18px 18px;
+      text-align: center;
+      box-shadow: 0 18px 40px rgba(0,0,0,.18);
+    }
+    .success-title {
+      font-size: 24px;
+      line-height: 1.5;
+      color: var(--red-dark);
+      font-weight: 700;
+    }
+    .success-sub {
+      margin-top: 10px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #7c655c;
+    }
+    .success-close {
+      margin-top: 16px;
+      appearance: none;
+      border: none;
+      background: var(--red);
+      color: #fff8ef;
+      padding: 11px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(167,63,58,.16);
+    }
+
+    .thanks-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.28);
+      z-index: 10001;
+      overflow: hidden;
+      padding: 16px;
+    }
+    .thanks-box {
+      position: relative;
+      z-index: 2;
+      width: min(92%, 420px);
+      background: rgba(255,253,248,.97);
+      border: 2px solid var(--line);
+      border-radius: 22px;
+      padding: 24px 18px 18px;
+      text-align: center;
+      box-shadow: 0 18px 40px rgba(0,0,0,.18);
+    }
+    .thanks-title {
+      font-size: 24px;
+      line-height: 1.5;
+      color: var(--red-dark);
+      font-weight: 700;
+    }
+    .thanks-close {
+      margin-top: 16px;
+      appearance: none;
+      border: none;
+      background: var(--red);
+      color: #fff8ef;
+      padding: 11px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(167,63,58,.16);
+    }
+
   </style>
 </head>
 <body>
@@ -699,8 +798,8 @@
       <div class="rsvp-modal-title">Tham gia dự tiệc</div>
       <div class="rsvp-modal-sub">Xin vui lòng chọn một trong hai phương án bên dưới. Kết quả sẽ được gửi tới người mời.</div>
       <div class="rsvp-choice-row">
-        <button class="rsvp-choice-btn" onclick="chooseRsvp('Có tham gia')">🥂 Có tham gia</button>
-        <button class="rsvp-choice-btn secondary" onclick="chooseRsvp('Bận mất rồi')">😔 Tiếc quá, không tham gia được</button>
+        <button class="rsvp-choice-btn" onclick="chooseRsvp('yes')">🥂 Có tham gia</button>
+        <button class="rsvp-choice-btn secondary" onclick="chooseRsvp('no')">😔 Tiếc quá, không tham gia được</button>
       </div>
       <button class="rsvp-close" onclick="closeRsvpModal()">Đóng</button>
     </div>
@@ -728,7 +827,7 @@
     }
 
     function chooseRsvp(choice) {
-      const url = new URL("https://script.google.com/macros/s/AKfycbx3PZT6Yeq7OD4PPeuOx90U5TO2EN6T0YWd9HVZGTuXFEd6oSuHwuZAKbKPixGbnp2ccA/exec");
+      const url = new URL("https://script.google.com/macros/s/AKfycbxoJmb696PUiZ2C2lziFl2b0TyzTuPP3Yh3INK46oKFGnv--pz6GlDRyhbI6J8zkvcE/exec");
       url.searchParams.set("name", guestName);
       url.searchParams.set("attend", choice);
 
@@ -748,5 +847,22 @@
         });
     }
   </script>
+
+  <div class="success-overlay" id="successOverlay" onclick="if(event.target===this) closeSuccessMessage();">
+    <canvas id="fireworksCanvas"></canvas>
+    <div class="success-box">
+      <div class="success-title">Hẹn gặp Quý khách tại đám cưới</div>
+      <div class="success-sub">Rất hân hạnh được đón tiếp Quý khách.</div>
+      <button class="success-close" onclick="closeSuccessMessage()">Đóng</button>
+    </div>
+  </div>
+
+  <div class="thanks-overlay" id="thanksOverlay" onclick="if(event.target===this) closeThanksMessage();">
+    <div class="thanks-box">
+      <div class="thanks-title">Cảm ơn Quý khách đã phản hồi</div>
+      <button class="thanks-close" onclick="closeThanksMessage()">Đóng</button>
+    </div>
+  </div>
+
 </body>
 </html>
